@@ -21,7 +21,7 @@ export default {
     },
     activeColor: {
       type: String,
-      default: '#e89abe',
+      default: '#ff8198',
     }
   },
   computed: {
