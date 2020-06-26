@@ -1,6 +1,6 @@
 <template>
   <div id="swiper">
-    <div class="swiper-content">
+    <div class="swiper-content" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
       <ul class="swiper-list" :style="setTotalWidth" @transitionend="checkPosition">
         <li class="swiper-item" v-for="(item, index) in banners" :key="index">
           <a :href="item.link">
@@ -9,8 +9,12 @@
         </li>
       </ul>
     </div>
-    <div class="indicator">
-      
+    <div class="indicator" v-if="itemCount>1">
+      <div class="indi-item" 
+        v-for="(item, index) in originBanners" 
+        :key="index" 
+        :class="{active: index === currentIndex}">
+      </div>
     </div>
   </div>
 </template>
@@ -27,10 +31,15 @@ export default {
   },
   data() {
     return {
-      itemCount: 0,  // 记录初始banner数
+      itemCount: 0,  // 记录初始banner数量
       bannerWidth: 0, // 记录每个banner的宽度
       currentIndex: 0, // 记录当前swiper中的banner序号 
       swiperListStyle: {},
+      originBanners: [],  // 记录初始banner
+      timer: null,
+      moveStart: null,  // 记录点击初始位置
+      dis: null,        // 轮播图被移动的距离
+      moveFlag: false,  // 判断轮播图被触屏后是否产生移动
     }
   },
   methods: {
@@ -40,18 +49,40 @@ export default {
     handleBanners: function() {
       // 获取banner总数
       this.itemCount = this.banners.length;
-
+      
       // 处理传入的banner数据，若banner数大于1，则克隆第一张插入尾部，克隆最后一场插入头部
       if(this.itemCount > 1) {
         this.banners.splice(this.itemCount, 0, this.banners[0]);
         this.banners.splice(0, 0, this.banners[this.itemCount - 1]);
+        this.originBanners = this.banners.slice(1, this.itemCount + 1);
       }
+    },
+
+    /**
+     * 设置timer,开始循环轮播
+     */
+    startTimer: function() {
+      // 定时轮播，移动位置为当前index * banner宽度
+      this.timer = setInterval(() => {
+        this.currentIndex++;
+        this.slideBanner(-this.currentIndex * this.bannerWidth, true);
+        console.log("timer running");
+      }, 3000);
+    },
+
+    /**
+     *  关闭timer 
+     */
+    stopTimer: function() {
+      clearInterval(this.timer);
+      console.log("timer closed");
     },
 
     /**
      * DOM操作以实现轮播图轮播
      */
     handleDom: function() {
+      this.stopTimer();
       let swiper = document.querySelector(".swiper-content");
       let swiperList = document.querySelector(".swiper-list");
       let swiperItem = document.querySelectorAll(".swiper-item");
@@ -60,11 +91,7 @@ export default {
       this.bannerWidth = swiper.offsetWidth;
       this.swiperListStyle = swiperList.style;
 
-      // 定时轮播，移动位置为当前index * banner宽度
-      let timer = setInterval(() => {
-        this.currentIndex++;
-        this.slideBanner(-this.currentIndex * this.bannerWidth, true);
-      }, 3000);
+      this.startTimer();
     },
 
     /**
@@ -99,12 +126,53 @@ export default {
       }
     },
 
-    setTransform: function() {
-      setInterval(() => {
+    /**
+     * 用户触碰轮播图，停止轮播图自动切换
+     */
+    touchStart: function(e) {
+      this.stopTimer();
+      this.moveStart = e.targetTouches[0].pageX;
+    },
 
-      }, 3000);
+    /**
+     * 移动轮播图，并记录轮播图被移动的距离
+     */
+    touchMove: function(e) {
+      this.moveFlag = true;
+      let move = e.targetTouches[0].pageX;
+      this.dis = move - this.moveStart;
+      let translateX = -this.currentIndex * this.bannerWidth + this.dis;
+      this.slideBanner(translateX, false);
+    },
+
+    /**
+     * 手指离开屏幕后，判断轮播图移动位置是否满足切换下(上)一张，
+     * 不满足则回到原图，满足则切换
+     */
+    touchEnd: function() {
+      if(this.moveFlag) {
+        this.moveFlag = false;
+        if(Math.abs(this.dis) > 50) {
+          if(this.dis > 0) {
+            this.currentIndex--;
+          } else {
+            this.currentIndex++;
+          }
+        }
+        this.slideBanner(-this.currentIndex * this.bannerWidth, true);
+        this.resetTouchPara();
+        this.startTimer();
+      }
+      
+    },
+
+    /**
+     * 重置移动轮播图操作的参数
+     */
+    resetTouchPara: function() {
+      this.moveStart = null;
+      this.dis = null;
     }
-
   },
   computed: {
     /**
@@ -117,9 +185,10 @@ export default {
     
   },
   mounted: function() {
-    setTimeout(() => {
-      this.handleDom();
-    }, 3000);
+    // setTimeout(() => {
+    //   this.handleDom();
+    // }, 500);
+    this.handleDom();
   }
   
 }
@@ -148,5 +217,24 @@ export default {
     width: 100vw;
   }
 
+  .indicator {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
+  .indi-item {
+    float: left;
+    width: 5px;
+    height: 5px;
+    margin: 0 3px;
+    border-radius: 2.5px;
+    background-color: #fff;
+    transition: all .2s;
+  }
+
+  .indi-item.active {
+    width: 15px;
+  }
 </style>
