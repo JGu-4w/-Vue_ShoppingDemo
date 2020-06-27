@@ -6,12 +6,14 @@
       </template>
     </nav-bar>
     <swiper :banners="banners"></swiper>
+    <reco-view :recommends="recommends"></reco-view>
   </div>
 </template>
 
 <script>
 import NavBar from 'components/common/navbar/NavBar';
 import Swiper from 'components/common/swiper/Swiper';
+import RecoView from './childComponents/HomeRecommendView';
 
 import { getHomeMultidata } from 'network/home'
 
@@ -26,6 +28,7 @@ export default {
   components: {
     NavBar,
     Swiper,
+    RecoView,
   },
   created() {
     getHomeMultidata()
