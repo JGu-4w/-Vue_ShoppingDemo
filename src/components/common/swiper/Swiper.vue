@@ -26,7 +26,9 @@ export default {
   props: {
     banners: {
       type: Array,
-      default: []
+      default: function() {
+        return [];
+      }
     }
   },
   data() {
@@ -66,7 +68,6 @@ export default {
       this.timer = setInterval(() => {
         this.currentIndex++;
         this.slideBanner(-this.currentIndex * this.bannerWidth, true);
-        console.log("timer running");
       }, 3000);
     },
 
@@ -75,7 +76,6 @@ export default {
      */
     stopTimer: function() {
       clearInterval(this.timer);
-      console.log("timer closed");
     },
 
     /**
@@ -194,7 +194,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   #swiper {
     position: relative;
   }
