@@ -2,7 +2,7 @@
   <div id="swiper">
     <div class="swiper-content" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
       <ul class="swiper-list" :style="setTotalWidth" @transitionend="checkPosition">
-        <li class="swiper-item" v-for="(item, index) in banners" :key="index">
+        <li class="swiper-item" v-for="item in banners">
           <a :href="item.link">
             <img :src="item.image" alt="">
           </a>
