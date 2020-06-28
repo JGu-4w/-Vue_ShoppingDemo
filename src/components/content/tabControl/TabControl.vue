@@ -28,6 +28,7 @@ export default {
   methods: {
     itemClick: function(index) {
       this.currentIndex = index;
+      this.$emit('tabClick', index);
     }
   }
 }
@@ -42,6 +43,7 @@ export default {
     font-size: 14px;
     margin: 4px 0;
     background-color: #fff;
+    z-index: 9;
   }
 
   .title-list {
