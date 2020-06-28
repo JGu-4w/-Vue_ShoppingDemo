@@ -8,7 +8,10 @@
     <swiper :banners="banners"></swiper>
     <recommend-view :recommends="recommends"></recommend-view>
     <feature-view></feature-view>
-    <tab-control :titles='["流行", "新款", "精选"]'></tab-control>
+    <tab-control class="tab-control"
+                 :titles='["流行", "新款", "精选"]'
+                 @tabClick="tabClick"></tab-control>
+    <product-list :productList="showProducts"></product-list>
     <ul>
       <li>1</li>
       <li>2</li>
@@ -119,6 +122,7 @@ import NavBar from 'components/common/navbar/NavBar';
 import Swiper from 'components/common/swiper/Swiper';
 
 import TabControl from 'components/content/tabControl/TabControl';
+import ProductList from 'components/content/products/ProductList';
 
 import RecommendView from './childComponents/HomeRecommendView';
 import FeatureView from './childComponents/FeatureView';
@@ -135,13 +139,15 @@ export default {
         'pop': {page:0, list:[]},
         'new': {page:0, list:[]},
         'sell': {page:0, list:[]},
-      }
+      },
+      currentIndex: 'pop',
     }
   },
   components: {
     NavBar,
     Swiper,
     TabControl,
+    ProductList,
     RecommendView,
     FeatureView,
   },
@@ -152,6 +158,25 @@ export default {
     this.getHomeProducts('sell');
   },
   methods: {
+    // 事件监听相关
+    /**
+     * 响应tabControl点击事件切换不同商品图
+     */
+    tabClick(index) {
+      switch(index) {
+        case 0: 
+          this.currentIndex = 'pop';
+          break;
+        case 1: 
+          this.currentIndex = 'new';
+          break;
+        case 2: 
+          this.currentIndex = 'sell';
+          break;
+      }
+    },
+    
+    // 网络请求相关
     /**
      * 获取轮播图和热门推荐数据
      */
@@ -169,10 +194,17 @@ export default {
     getHomeProducts(type) {
       const page = this.products[type].page + 1;
       getHomeProducts(type, page).then(res => {
-        console.log(res);
         this.products[type].list.push(...res.data.list);
         this.products[type].page++;
       }).catch(err => console.log(err));
+    }
+  },
+  computed: {
+    /**
+     * 展示选定的商品
+     */
+    showProducts() {
+      return this.products[this.currentIndex].list
     }
   }
 }
