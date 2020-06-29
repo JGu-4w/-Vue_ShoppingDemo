@@ -1,8 +1,8 @@
 <template>
   <div id="swiper">
-    <div class="swiper-content" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
-      <ul class="swiper-list" :style="setTotalWidth" @transitionend="checkPosition">
-        <li class="swiper-item" v-for="item in banners">
+    <div class="swiper-content" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" ref="swiperContent">
+      <ul class="swiper-list" :style="setTotalWidth" @transitionend="checkPosition" ref="swiperList">
+        <li class="swiper-item" v-for="item in banners" ref="swiperItem">
           <a :href="item.link">
             <img :src="item.image" alt="">
           </a>
@@ -83,9 +83,10 @@ export default {
      */
     handleDom: function() {
       this.stopTimer();
-      let swiper = document.querySelector(".swiper-content");
-      let swiperList = document.querySelector(".swiper-list");
-      let swiperItem = document.querySelectorAll(".swiper-item");
+      // let swiper = document.querySelector(".swiper-content");
+      let swiper = this.$refs.swiperContent;
+      let swiperList = this.$refs.swiperList;
+      let swiperItem = this.$refs.swiperItem;
       
       // 获取banner宽度和swiperList的style
       this.bannerWidth = swiper.offsetWidth;
