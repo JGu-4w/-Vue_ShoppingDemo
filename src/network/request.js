@@ -2,7 +2,8 @@ import axios from 'axios';
 
 export function request(config) {
   const instance = axios.create({
-    baseURL: 'http://123.207.32.32:8000',
+    // baseURL: 'http://xxx.xxx.xx.xx:xxxx', // 接口已更改，请联系自行联系老师购买，微信: coderwhy003
+
     timeout: 5000,
   });
 
