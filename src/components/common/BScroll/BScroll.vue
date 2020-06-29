@@ -45,10 +45,13 @@ export default {
   },
   methods: {
     scrollTo(x, y, time=500) {
-      this.scroll.scrollTo(x, y, time);
+      this.scroll && this.scroll.scrollTo(x, y, time);
     },
     finishPullUp() {
       this.scroll.finishPullUp();
+    },
+    refresh() {
+      this.scroll && this.scroll.refresh();
     }
   }
 }
@@ -56,7 +59,7 @@ export default {
 
 <style scoped>
   .wrapper {
-    height: calc(100% - 93px);
+    height: calc(100% - 44px - 49px);
     overflow: hidden;
   }
 </style>
