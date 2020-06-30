@@ -4,7 +4,7 @@
       <ul class="swiper-list" :style="setTotalWidth" @transitionend="checkPosition" ref="swiperList">
         <li class="swiper-item" v-for="item in banners" ref="swiperItem">
           <a :href="item.link">
-            <img :src="item.image" alt="">
+            <img :src="item.image" alt="" @load="swiperImgLoaded">
           </a>
         </li>
       </ul>
@@ -42,6 +42,7 @@ export default {
       moveStart: null,  // 记录点击初始位置
       dis: null,        // 轮播图被移动的距离
       moveFlag: false,  // 判断轮播图被触屏后是否产生移动
+      isLoaded: false,  // 某一张轮播图是否加载完成，用以判断是否能够获取tabControl组件的offsetTop
     }
   },
   methods: {
@@ -173,6 +174,15 @@ export default {
     resetTouchPara: function() {
       this.moveStart = null;
       this.dis = null;
+    },
+    /**
+     * 轮播图加载完成
+     */
+    swiperImgLoaded: function() {
+      if(!this.isLoaded) {
+        this.$emit('swiperImgLoaded');
+        this.isLoaded = true;
+      }
     }
   },
   computed: {
