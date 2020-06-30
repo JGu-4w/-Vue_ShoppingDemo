@@ -5,18 +5,24 @@
         <p>购物街</p>
       </template>
     </nav-bar>
+    <tab-control class="tab-control"
+            :titles='["流行", "新款", "精选"]'
+            @tabClick="tabClick"
+            ref="tabControl2"
+            v-show="isShowTabControl"></tab-control>
     <scroll class="scroll" 
             :prob-type="3" 
             :pull-up-load="true" 
             ref="scroll" 
-            @scroll="controlBackTop" 
-            @pullingUp="pullingUp">
-      <swiper :banners="banners"></swiper>
+            @scroll="controlBackTop"
+            @loadMore="loadMore">
+      <swiper :banners="banners" @swiperImgLoaded="swiperImgLoaded"></swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature-view></feature-view>
       <tab-control class="tab-control"
                   :titles='["流行", "新款", "精选"]'
-                  @tabClick="tabClick"></tab-control>
+                  @tabClick="tabClick"
+                  ref="tabControl1"></tab-control>
       <product-list :productList="showProducts"></product-list>
     </scroll>
     <back-to-top @click.native="backTop" v-show="isShowBackTop"></back-to-top>
@@ -35,7 +41,8 @@ import BackToTop from 'components/content/backToTop/BackToTop';
 import RecommendView from './childComponents/HomeRecommendView';
 import FeatureView from './childComponents/FeatureView';
 
-import { getHomeMultidata, getHomeProducts } from 'network/home'
+import { getHomeMultidata, getHomeProducts } from 'network/home';
+import { debounce } from 'common/utils';
 
 export default {
   name: 'home',
@@ -49,7 +56,9 @@ export default {
         'sell': {page:0, list:[]},
       },
       currentIndex: 'pop',
-      isShowBackTop: false
+      isShowBackTop: false,
+      tabOffsetTop: 0,
+      isShowTabControl: false,
     }
   },
   components: {
@@ -63,12 +72,17 @@ export default {
     FeatureView,
   },
   created() {
-    setTimeout(() => {
-      this.getHomeMultidata();
-      this.getHomeProducts('pop');
-      this.getHomeProducts('new');
-      this.getHomeProducts('sell');
-    }, 500)
+    this.getHomeMultidata();
+    this.getHomeProducts('pop');
+    this.getHomeProducts('new');
+    this.getHomeProducts('sell');
+  },
+  mounted() {
+    // 监听item中的图片加载完成
+    const refresh = debounce(this.$refs.scroll.refresh, 200);
+    this.$bus.$on('itemLoaded', () => {
+      refresh();
+    })
   },
   methods: {
     // 事件监听相关
@@ -87,6 +101,8 @@ export default {
           this.currentIndex = 'sell';
           break;
       }
+      this.$refs.tabControl1.currentIndex = index;
+      this.$refs.tabControl2.currentIndex = index;
     },
     /**
      * 返回至页面顶部
@@ -99,13 +115,22 @@ export default {
      */
     controlBackTop(pos) {
       this.isShowBackTop = (-pos.y) > 1000;
+      this.isShowTabControl = (-pos.y) > this.tabOffsetTop;
     },
     /**
      * 上拉加载更多
      */
-    pullingUp() {
+    loadMore() {
       this.getHomeProducts(this.currentIndex);
-      this.$refs.scroll.finishPullUp();
+      setTimeout(() => {
+        this.$refs.scroll.finishPullUp();
+      }, 600);
+    },
+    /**
+     * 获取tabControl的offsetTop
+     */
+    swiperImgLoaded() {
+      this.tabOffsetTop = this.$refs.tabControl1.$el.offsetTop;      
     },
     // 网络请求相关
     /**
@@ -147,15 +172,22 @@ export default {
   }
 
   .home-nav {
-    position: sticky;
-    top: 0;
     background-color: var(--color-tint);
-    font-weight: 700;
     color: #fff;
+    /* 使用系统原生滚动时，让导航栏不跟随页面滚动 */
+    /* position: sticky;
+    top: 0; */
+  }
+  .tab-control {
+    position: relative;
+    z-index: 9;
   }
 
-  .tab-control {
-    position: sticky;
+  .scroll {
+    position: absolute;
     top: 44px;
+    bottom: 49px;
+    left: 0;
+    right: 0;
   }
 </style>
