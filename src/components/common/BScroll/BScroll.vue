@@ -28,30 +28,32 @@ export default {
   },
   mounted: function() {
     this.scroll = new BScroll(this.$refs.wrapper, {
-      probType: this.probType,
       click: true,
+      probType: this.probType,
       pullUpLoad: this.pullUpLoad,
     });
 
-    this.scroll.on('scroll', (pos) => {
-      this.$emit('scroll', pos);
-    });
+    if(this.probType == 2 || this.probType == 3) {
+      this.scroll.on('scroll', (pos) => {
+        this.$emit('scroll', pos);
+      });
+    }
 
-    this.scroll.on('pullingUp', () => {
-      // console.log("加载");
-      // this.scroll.finishPullUp();
-      this.$emit('pullingUp');
-    });
+    if(this.pullUpLoad) {
+      this.scroll.on('pullingUp', () => {
+        this.$emit('loadMore');
+      });
+    }
   },
   methods: {
     scrollTo(x, y, time=500) {
       this.scroll && this.scroll.scrollTo(x, y, time);
     },
-    finishPullUp() {
-      this.scroll.finishPullUp();
-    },
     refresh() {
       this.scroll && this.scroll.refresh();
+    },
+    finishPullUp() {
+      this.scroll && this.scroll.finishPullUp();
     }
   }
 }
