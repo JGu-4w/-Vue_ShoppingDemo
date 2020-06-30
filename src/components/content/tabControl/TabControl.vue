@@ -41,9 +41,8 @@ export default {
     height: 40px;
     line-height: 40px;
     font-size: 14px;
-    margin: 4px 0;
+    margin-bottom: 4px;
     background-color: #fff;
-    z-index: 9;
   }
 
   .title-list {
