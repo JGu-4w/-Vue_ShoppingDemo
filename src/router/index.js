@@ -5,6 +5,7 @@ const Home = () => import(/* webpackChunkName: "home" */ '../views/home/Home');
 const Catagory = () => import(/* webpackChunkName: "catagory" */ '../views/catagory/Catagory');
 const Cart = () => import(/* webpackChunkName: "cart" */ '../views/cart/Cart');
 const Profile = () => import(/* webpackChunkName: "profile" */ '../views/profile/Profile');
+const Detail = () => import(/* webpackChunkName: "detail" */ '../views/detail/Detail');
 
 Vue.use(VueRouter);
 
@@ -28,6 +29,10 @@ const routes = [
   {
     path: '/profile',
     component: Profile,
+  },
+  {
+    path: '/detail/:iid',
+    component: Detail,
   }
 ];
 
