@@ -1,13 +1,13 @@
 <template>
   <div id="swiper">
     <div class="swiper-content" @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd" ref="swiperContent">
-      <ul class="swiper-list" :style="setTotalWidth" @transitionend="checkPosition" ref="swiperList">
-        <li class="swiper-item" v-for="item in banners" ref="swiperItem">
+      <div class="swiper-list" :style="setTotalWidth" @transitionend="checkPosition" ref="swiperList">
+        <div class="swiper-item" v-for="item in banners" ref="swiperItem">
           <a :href="item.link">
             <img :src="item.image" alt="" @load="swiperImgLoaded">
           </a>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
     <div class="indicator" v-if="itemCount>1">
       <div class="indi-item" 
