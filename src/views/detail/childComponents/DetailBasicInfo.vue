@@ -105,24 +105,22 @@ export default {
     margin: 10px 0;
     text-align: center;
     display: flex;
-    width: 100vw;
-    left: -20px;
+    justify-content: space-between;
   }
 
   .services img {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 12px;
-    height: 12px;
-    margin-right: 3px;
+    width: 10px;
+    height: 10px;
   }
 
   .services div {
-    flex: 1;
+    /* flex: 1; */
   }
 
   .services div span {
-    padding-left: 15px;
+    padding-left: 12px;
   }
 </style>
