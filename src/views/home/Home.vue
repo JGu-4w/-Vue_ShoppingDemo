@@ -10,20 +10,22 @@
             @tabClick="tabClick"
             ref="tabControl2"
             v-show="isShowTabControl"></tab-control>
-    <scroll class="scroll" 
+    <scroll class="content" 
             :prob-type="3" 
             :pull-up-load="true" 
             ref="scroll" 
             @scroll="controlBackTop"
             @loadMore="loadMore">
-      <swiper :banners="banners" @swiperImgLoaded="swiperImgLoaded"></swiper>
-      <recommend-view :recommends="recommends"></recommend-view>
-      <feature-view></feature-view>
-      <tab-control class="tab-control"
-                  :titles='["流行", "新款", "精选"]'
-                  @tabClick="tabClick"
-                  ref="tabControl1"></tab-control>
-      <product-list :productList="showProducts"></product-list>
+      <div>
+        <swiper :banners="banners" @swiperImgLoaded="swiperImgLoaded"></swiper>
+        <recommend-view :recommends="recommends"></recommend-view>
+        <feature-view></feature-view>
+        <tab-control class="tab-control"
+                    :titles='["流行", "新款", "精选"]'
+                    @tabClick="tabClick"
+                    ref="tabControl1"></tab-control>
+        <product-list :productList="showProducts"></product-list>
+      </div>
     </scroll>
     <back-to-top @click.native="backTop" v-show="isShowBackTop"></back-to-top>
   </div>
@@ -59,6 +61,7 @@ export default {
       isShowBackTop: false,
       tabOffsetTop: 0,
       isShowTabControl: false,
+      scrollY: 0,
     }
   },
   components: {
@@ -79,11 +82,17 @@ export default {
   },
   mounted() {
     // 监听item中的图片加载完成
-    const refresh = debounce(this.$refs.scroll.refresh, 200);
+    const refresh = debounce(this.$refs.scroll.myRefresh, 200);
     this.$bus.$on('itemLoaded', () => {
       refresh();
     })
   },
+  // activated() {
+  //   this.$refs.scroll.scroll.scrollTo(0, this.scrollY);
+  // },
+  // deactivated() {
+  //   this.scrollY = this.$refs.scroll.scroll.y;
+  // },
   methods: {
     // 事件监听相关
     /**
@@ -108,7 +117,7 @@ export default {
      * 返回至页面顶部
      */
     backTop() {
-      this.$refs.scroll.scrollTo(0, 0);
+      this.$refs.scroll.myScrollTo(0, 0);
     },
     /**
      * 判断是否显示回到顶部按钮
@@ -123,14 +132,14 @@ export default {
     loadMore() {
       this.getHomeProducts(this.currentIndex);
       setTimeout(() => {
-        this.$refs.scroll.finishPullUp();
+        this.$refs.scroll.myFinishPullUp();
       }, 600);
     },
     /**
      * 获取tabControl的offsetTop
      */
     swiperImgLoaded() {
-      this.tabOffsetTop = this.$refs.tabControl1.$el.offsetTop;      
+      this.tabOffsetTop = this.$refs.tabControl1.$el.offsetTop;
     },
     // 网络请求相关
     /**
@@ -162,18 +171,21 @@ export default {
     showProducts() {
       return this.products[this.currentIndex].list;
     }
-  }
+  },
 }
 </script>
 
 <style scoped>
   #home {
     height: 100vh;
+    background-color: #fff;
   }
 
   .home-nav {
+    position: relative;
     background-color: var(--color-tint);
     color: #fff;
+    z-index: 9;
     /* 使用系统原生滚动时，让导航栏不跟随页面滚动 */
     /* position: sticky;
     top: 0; */
@@ -183,11 +195,11 @@ export default {
     z-index: 9;
   }
 
-  .scroll {
-    position: absolute;
+  .content {
+    /* position: absolute;
     top: 44px;
     bottom: 49px;
     left: 0;
-    right: 0;
+    right: 0; */
   }
 </style>
