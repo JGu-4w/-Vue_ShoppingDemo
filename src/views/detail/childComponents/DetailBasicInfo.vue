@@ -1,11 +1,13 @@
 <template>
-  <div class="detail-product-info" v-if="Object.keys(product).length !== 0">
+  <div id="detail-product-info" v-if="Object.keys(product).length !== 0">
     <div class="product-intro">
       <p>{{product.title}}</p>
       <div class="product-price">
         <span class="price">{{'￥' + product.price}}</span>
         <span class="old-price">{{'￥' + product.oldPrice}}</span>
-        <span class="discount" :style="{'background-color': product.discountBgColor}">{{product.discountDesc}}</span>
+        <span class="discount" 
+              :style="{'background-color': product.discountBgColor}"
+              v-if="product.discountDesc">{{product.discountDesc}}</span>
       </div>
     </div>
     <div class="columns">
@@ -39,8 +41,9 @@ export default {
 </script>
 
 <style scoped>
-  .detail-product-info {
+  #detail-product-info {
     margin: 10px;
+    background-color: #fff;
   }
 
   .product-intro p {
@@ -69,12 +72,12 @@ export default {
   .discount {
     position: absolute;
     top: 0;
-    width: 40px;
     height: 14px;
     font-size: 12px;
     text-align: center;
     color: #fff;
     border-radius: 5px;
+    padding: 0 2px;
   }
 
   .columns {
