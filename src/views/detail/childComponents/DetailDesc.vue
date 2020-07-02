@@ -86,6 +86,7 @@ export default {
 
   .desc p {
     padding: 20px 0;
+    font-size: 14px;
   }
 
   .images {
@@ -94,6 +95,7 @@ export default {
 
   .image-key {
     margin-bottom: 10px;
+    font-size: 14px;
   }
 
   .img-list img {
