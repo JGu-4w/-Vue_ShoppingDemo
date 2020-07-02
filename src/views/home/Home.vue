@@ -87,12 +87,13 @@ export default {
       refresh();
     })
   },
-  // activated() {
-  //   this.$refs.scroll.scroll.scrollTo(0, this.scrollY);
-  // },
-  // deactivated() {
-  //   this.scrollY = this.$refs.scroll.scroll.y;
-  // },
+  activated() {
+    this.$refs.scroll.scroll.scrollTo(0, this.scrollY, 100);
+    this.$refs.scroll.myRefresh();
+  },
+  deactivated() {
+    this.scrollY = this.$refs.scroll.scroll.y;
+  },
   methods: {
     // 事件监听相关
     /**
