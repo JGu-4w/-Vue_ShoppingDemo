@@ -1,6 +1,6 @@
 <template>
   <div class="product-list-item" @click="itemClick">
-    <img :src="productItem.show.img" alt="" @load="itemLoaded">
+    <img :src="getImage" alt="" @load="itemLoaded">
     <div class="product-info">
       <p>{{productItem.title}}</p>
       <span class="price">{{productItem.price}}</span>
@@ -20,12 +20,25 @@ export default {
       }
     }
   },
+  computed: {
+    getImage() {
+      return this.productItem.image || this.productItem.show.img;
+    }
+  },
   methods: {
     itemLoaded() {
-      this.$bus.$emit('itemLoaded');
+      if(this.$route.path.indexOf('/home') !== -1) {
+        this.$bus.$emit('homeItemLoaded');
+      } else if (this.$route.path.indexOf('/detail') !== -1){
+        this.$bus.$emit('detailItemLoaded');
+      }
     },
     itemClick() {
-      this.$router.push('/detail/' + this.productItem.iid);
+      if(this.productItem.item_id) {
+        this.$router.push('/detail/' + this.productItem.item_id);
+      } else {
+        this.$router.push('/detail/' + this.productItem.iid);
+      }
     }
   }
 }
