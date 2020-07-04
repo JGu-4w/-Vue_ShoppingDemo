@@ -1,5 +1,5 @@
 <template>
-  <div id="detail-product-info" v-if="Object.keys(product).length !== 0">
+  <div id="detail-basic-info" v-if="Object.keys(product).length !== 0">
     <div class="product-intro">
       <p>{{product.title}}</p>
       <div class="product-price">
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style scoped>
-  #detail-product-info {
+  #detail-basic-info {
     margin: 10px;
     background-color: #fff;
   }
