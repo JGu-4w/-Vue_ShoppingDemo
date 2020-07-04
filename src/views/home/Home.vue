@@ -11,7 +11,7 @@
             ref="tabControl2"
             v-show="isShowTabControl"></tab-control>
     <scroll class="content" 
-            :prob-type="3" 
+            :probe-type="3" 
             :pull-up-load="true" 
             ref="scroll" 
             @scroll="controlBackTop"
@@ -83,7 +83,7 @@ export default {
   mounted() {
     // 监听item中的图片加载完成
     const refresh = debounce(this.$refs.scroll.myRefresh, 200);
-    this.$bus.$on('itemLoaded', () => {
+    this.$bus.$on('homeItemLoaded', () => {
       refresh();
     })
   },
