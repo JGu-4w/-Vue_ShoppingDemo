@@ -15,7 +15,7 @@ export default {
     }
   },
   props: {
-    probType: {
+    probeType: {
       type: Number,
       default: 0,
     },
@@ -27,11 +27,11 @@ export default {
   mounted: function() {
     this.scroll = new BScroll(this.$refs.wrapper, {
       click: true,
-      probType: this.probType,
+      probeType: this.probeType,
       pullUpLoad: this.pullUpLoad,
     });
 
-    if(this.probType == 2 || this.probType == 3) {
+    if(this.probeType == 2 || this.probeType == 3) {
       this.scroll.on('scroll', (pos) => {
         this.$emit('scroll', pos);
       });
