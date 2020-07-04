@@ -8,7 +8,10 @@
       </template>
       <template v-slot:center>
         <div class="title">
-          <div v-for="(item, index) in title" :key="index" :class="{active: currentIndex === index}">{{item}}</div>
+          <div v-for="(item, index) in title" 
+               :key="index" 
+               :class="{active: currentIndex === index}"
+               @click="itemClick(index)">{{item}}</div>
         </div>
       </template>
     </nav-bar>
@@ -32,7 +35,11 @@ export default {
   methods: {
     back() {
       this.$router.go(-1);
-    }
+    },
+    itemClick(index) {
+      this.currentIndex = index;
+      this.$emit('navClick', index);
+    },
   }
 }
 </script>
