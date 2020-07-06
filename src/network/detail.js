@@ -5,7 +5,8 @@ export { getProductDetail,
          ShopInfo, 
          DetailInfo, 
          ProductParams, 
-         CommentInfo };
+         CommentInfo,
+         CartProductInfo };
 
 function getProductDetail(iid) {
   return request({
@@ -63,5 +64,14 @@ class CommentInfo {
   constructor(rate) {
     this.rate = rate.cRate;
     this.list = rate.list;
+  }
+}
+
+class CartProductInfo {
+  constructor(skuInfo) {
+    this.options = skuInfo.props;
+    this.skus = skuInfo.skus;
+    this.defaultPrice = skuInfo.defaultPrice;
+    this.totalStock = skuInfo.totalStock;
   }
 }
