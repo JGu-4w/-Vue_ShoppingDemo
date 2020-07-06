@@ -15,7 +15,8 @@
         <recommend :productList="recommends" ref="recommends"></recommend>
       </div>
     </scroll>
-    <detail-bottom-bar></detail-bottom-bar>
+    <detail-add-cart ref="addcart" :cartProductInfo="cartProduct"></detail-add-cart>
+    <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
     <back-to-top v-show="showBackTop" @click.native="backToTop"></back-to-top>
   </div>
 </template>
@@ -33,6 +34,7 @@ import DetailDesc from './childComponents/DetailDesc';
 import DetailProductParams from './childComponents/DetailProductParams';
 import DetailCommentInfo from './childComponents/DetailCommentInfo';
 import DetailBottomBar from './childComponents/DetailBottomBar';
+import DetailAddCart from './childComponents/DetailAddCart';
 
 import { getProductDetail, 
          getRecommend,
@@ -40,7 +42,8 @@ import { getProductDetail,
          ShopInfo, 
          DetailInfo, 
          ProductParams, 
-         CommentInfo } from 'network/detail';
+         CommentInfo,
+         CartProductInfo } from 'network/detail';
 
 import { debounce } from 'common/utils'
 
@@ -58,6 +61,7 @@ export default {
     DetailProductParams,
     DetailCommentInfo,
     DetailBottomBar,
+    DetailAddCart,
   },
   data() {
     return {
@@ -71,6 +75,7 @@ export default {
       recommends: [],
       showBackTop: false,
       positions: [],  // 记录详情页面顶部导航栏四个选项的纵坐标
+      cartProduct: {}
     }
   },
   created() {
@@ -92,6 +97,8 @@ export default {
       this.params = new ProductParams(data.itemParams.info, data.itemParams.rule);
       // 获取评论
       this.comments = new CommentInfo(data.rate);
+      // 获取添加购物车页面商品详情
+      this.cartProduct = new CartProductInfo(data.skuInfo);      
     })
     // 网络请求获取recommend的数据
     getRecommend().then(res => {
@@ -135,6 +142,12 @@ export default {
      */
     jumpTo(index) {
       this.$refs.scroll.myScrollTo(0, -this.positions[index]);
+    },
+    /**
+     * 当添加购物车按钮被点击，弹出添加购物车的页面
+     */
+    addToCart() {
+      this.$refs.addcart.showAddCart = true;
     }
   }
 }
