@@ -11,7 +11,7 @@
             <img :src="cartProductInfo.skus[0].img" alt="" v-if="selectColor===-1">
             <img :src="cartProductInfo.skus[selectColor * cartProductInfo.options[1].list.length].img" alt="" v-else>
           </div>
-          <template  v-if="selectSize !== -1 && selectColor !== -1">
+          <template v-if="selectSize !== -1 && selectColor !== -1">
             <div class="product-desc">
               <div class="price">
                 <span>￥{{cartProductInfo.skus[selectItem].nowprice / 100}}</span>
@@ -96,7 +96,11 @@ export default {
       default() {
         return {}
       }
-    }
+    },
+    productTitle: {
+      type: String,
+      default: null,
+    },
   },
   methods: {
     clickBlur() {
@@ -133,15 +137,14 @@ export default {
           this.selectSize = -1;
         }
       }
-      let test = this.selectColor * this.cartProductInfo.options[1].list.length
     },
     /**
      * 获取
      */
     itemStock() {
-      if(this.selectColor === -1  || this.selectColor === -1) {
+      if(this.selectColor === -1  || this.selectSize === -1) {
         return this.cartProductInfo.totalStock;
-      } else {
+      } else {        
         return this.cartProductInfo.skus[this.selectItem].stock;
       }
     },
@@ -160,8 +163,29 @@ export default {
      */
     toCart() {
       if(this.selectColor !== -1 && this.selectSize !== -1) {
-        
+        let sku = this.cartProductInfo.skus[this.selectItem];
+        let img = sku.img;
+        let price = sku.nowprice / 100;
+        let skuId = sku.xdSkuId;
+        let style = sku.style;
+        let size = sku.size;
+
+        let cartList = {
+          shopId: this.cartProductInfo.shopId,
+          shopName: this.cartProductInfo.shopName,
+          productList: [{
+            skuId: skuId,
+            title: this.productTitle,
+            productImg: img,
+            productPrice: price,
+            style: style,
+            size: size,
+            qty: this.qty,
+          }]
+        };
+        this.$store.commit('addToCart', cartList);
       }
+      
     }
   },
   computed: {
