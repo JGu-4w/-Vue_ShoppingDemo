@@ -15,7 +15,7 @@
         <recommend :productList="recommends" ref="recommends"></recommend>
       </div>
     </scroll>
-    <detail-add-cart ref="addcart" :cartProductInfo="cartProduct"></detail-add-cart>
+    <detail-add-cart ref="addcart" :cartProductInfo="cartProduct" :productTitle="product.title"></detail-add-cart>
     <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
     <back-to-top v-show="showBackTop" @click.native="backToTop"></back-to-top>
   </div>
@@ -98,7 +98,7 @@ export default {
       // 获取评论
       this.comments = new CommentInfo(data.rate);
       // 获取添加购物车页面商品详情
-      this.cartProduct = new CartProductInfo(data.skuInfo);      
+      this.cartProduct = new CartProductInfo(data.skuInfo, data.shopInfo);
     })
     // 网络请求获取recommend的数据
     getRecommend().then(res => {
