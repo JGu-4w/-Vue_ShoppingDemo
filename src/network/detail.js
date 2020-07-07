@@ -68,10 +68,13 @@ class CommentInfo {
 }
 
 class CartProductInfo {
-  constructor(skuInfo) {
+  constructor(skuInfo, shopInfo) {
     this.options = skuInfo.props;
     this.skus = skuInfo.skus;
     this.defaultPrice = skuInfo.defaultPrice;
     this.totalStock = skuInfo.totalStock;
+    this.shopName = shopInfo.name;
+    this.shopUrl = shopInfo.shopUrl;
+    this.shopId = shopInfo.shopId;
   }
 }
