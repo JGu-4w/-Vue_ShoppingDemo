@@ -84,7 +84,7 @@ export default {
   },
   data() {
     return {
-      showAddCart: true,
+      showAddCart: false,
       selectSize: -1,
       selectColor: -1,
       qty: 1,
@@ -139,7 +139,7 @@ export default {
       }
     },
     /**
-     * 获取
+     * 获取对应商品的库存
      */
     itemStock() {
       if(this.selectColor === -1  || this.selectSize === -1) {
@@ -184,14 +184,21 @@ export default {
           }]
         };
         this.$store.commit('addToCart', cartList);
+        this.showAddCart = false;
       }
       
     }
   },
   computed: {
+    /**
+     * 计算对应的sku序号
+     */
     selectItem() {
       return this.selectColor * this.cartProductInfo.options[1].list.length + this.selectSize;
     },
+    /**
+     * 监控购买数量不能超过最大库存
+     */
     checkQty() {
       if(this.selectColor !== -1  && this.selectColor !== -1) {
         if(this.qty > this.cartProductInfo.skus[this.selectItem].stock) {
