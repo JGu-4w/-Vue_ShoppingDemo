@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 const Home = () => import(/* webpackChunkName: "home" */ '../views/home/Home');
-const Catagory = () => import(/* webpackChunkName: "catagory" */ '../views/catagory/Catagory');
+const Category = () => import(/* webpackChunkName: "catagory" */ '../views/category/Category');
 const Cart = () => import(/* webpackChunkName: "cart" */ '../views/cart/Cart');
 const Profile = () => import(/* webpackChunkName: "profile" */ '../views/profile/Profile');
 const Detail = () => import(/* webpackChunkName: "detail" */ '../views/detail/Detail');
@@ -19,8 +19,8 @@ const routes = [
     component: Home,
   },
   {
-    path: '/catagory',
-    component: Catagory,
+    path: '/category',
+    component: Category,
   },
   {
     path: '/cart',

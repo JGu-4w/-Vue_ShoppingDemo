@@ -12,12 +12,12 @@
       </template>
     </tab-bar-item>
 
-    <tab-bar-item path="/catagory">
+    <tab-bar-item path="/category">
       <template #item-icon>
-        <img src="~assets/img/tabbar/catagory.svg" alt="">
+        <img src="~assets/img/tabbar/category.svg" alt="">
       </template>
       <template #item-icon-active>
-        <img src="~assets/img/tabbar/catagory-active.svg" alt="">
+        <img src="~assets/img/tabbar/category-active.svg" alt="">
       </template>
       <template #item-text>
         <p>分类</p>
