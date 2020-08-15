@@ -183,7 +183,9 @@ export default {
             qty: this.qty,
           }]
         };
-        this.$store.commit('addToCart', cartList);
+        this.$store.dispatch('addToCart', cartList).then(res => {
+          this.$toast.show(res);
+        });
         this.showAddCart = false;
       }
       
