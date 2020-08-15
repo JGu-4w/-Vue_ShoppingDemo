@@ -8,7 +8,6 @@ const Profile = () => import(/* webpackChunkName: "profile" */ '../views/profile
 const Detail = () => import(/* webpackChunkName: "detail" */ '../views/detail/Detail');
 
 Vue.use(VueRouter);
-
 const routes = [
   {
     path: '',
